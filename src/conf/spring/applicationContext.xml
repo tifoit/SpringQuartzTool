@@ -42,16 +42,13 @@
 	
 	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
 		<property name="from">
-			<!--  <value><![CDATA[shuzhai_xliang@163.com]]></value> -->
 			<value>${message.from}</value>
 		</property>
 		<property name="subject">
-			<!--  <value>This is a test mail send by stlz</value> -->
 			<value>${message.subject}</value>
 		</property>
 		<property name="text">
 			<value>
-				<!--  <![CDATA[你好！书斋小说网收录了各种小说，种类丰富，内容精彩，欢迎广大小说爱好者投稿和阅读。详情请访问书斋小说官网！现在时间是："%DATE%"]]> -->
 				${message.text}
 			</value>
 		</property>

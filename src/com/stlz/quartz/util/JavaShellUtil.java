@@ -90,5 +90,5 @@ public class JavaShellUtil {
 	public void setShellCommandNo(String shellCommandNo) {
 		this.shellCommandNo = shellCommandNo;
 	}
-	
+
 }
