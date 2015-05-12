@@ -27,8 +27,8 @@ public class MailServiceImpl implements MailService {
 	}
 	public void sendEmail(MailBean mail) {
 		SimpleMailMessage message = new SimpleMailMessage(this.mailMessage);
-		message.setTo(mail.getMailArray());
-//		message.setTo(mail.getAddress());
+//		message.setTo(mail.getMailArray());
+		message.setTo(mail.getAddress());
 		String text = message.getText();
 		text = StringUtils.replace(text, "%DATE%", format.format(new Date()));
 		message.setText(text);
