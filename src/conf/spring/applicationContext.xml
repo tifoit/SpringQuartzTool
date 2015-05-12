@@ -13,12 +13,12 @@
 
 	<bean id="mailBean" class="com.stlz.quartz.bean.MailBean">
 		<property name="address">
-			<value>aotuoMail@auto.com</value>
+			<value>liuzhuang@umpay.com</value>
 		</property>
 		<property name="mailArray">
 			<list>
 				<value>13812345678@139.com</value>
-				<value>13512345678@163.com</value>
+				<value>13098765432@126.com</value>
 			</list>
 		</property>
 	</bean>
