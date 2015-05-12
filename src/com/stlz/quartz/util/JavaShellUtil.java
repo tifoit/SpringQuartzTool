@@ -74,4 +74,21 @@ public class JavaShellUtil {
 		}
 		return success;
 	}
+	
+	public String getShellCommand() {
+		return shellCommand;
+	}
+
+	public void setShellCommand(String shellCommand) {
+		this.shellCommand = shellCommand;
+	}
+	
+	public String getShellCommandNo() {
+		return shellCommandNo;
+	}
+
+	public void setShellCommandNo(String shellCommandNo) {
+		this.shellCommandNo = shellCommandNo;
+	}
+	
 }
