@@ -1,4 +1,13 @@
 package com.stlz.quartz.service.impl;
+/**
+ * @Title: MailServiceImpl.java
+ * @Package: com.stlz.quartz.service.impl
+ * @Desc: Send Email Service implement
+ * @Copyright: 
+ * @author: liuzhuang
+ * @date: 2013/04/25
+ * @Email: liuzhuang@umpay.com
+ */
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,13 @@
 package com.stlz.quartz.job;
+/**
+ * @Title: SendEmailJob.java
+ * @Package: com.stlz.quartz.job
+ * @Desc: Send Email Job
+ * @Copyright: 
+ * @author: liuzhuang
+ * @date: 2013/04/25
+ * @Email: liuzhuang@umpay.com
+ */
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

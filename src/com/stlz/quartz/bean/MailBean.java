@@ -1,5 +1,13 @@
 package com.stlz.quartz.bean;
-
+/**
+ * @Title: MailBean.java
+ * @Package: com.stlz.quartz.bean
+ * @Desc: MailBean Setting
+ * @Copyright: 
+ * @author: liuzhuang
+ * @date: 2013/04/25
+ * @Email: liuzhuang@umpay.com
+ */
 
 public class MailBean {
 	private String address;
