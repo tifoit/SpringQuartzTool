@@ -57,3 +57,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+WebContent/META-INF/MANIFEST.MF
+WebContent/WEB-INF/*

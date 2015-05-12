@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:conf/props/mail.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="mailBean" class="com.stlz.quartz.bean.MailBean">
+		<property name="address">
+			<value>mail2</value>
+		</property>
+		<property name="mailArray">
+			<list>
+				<value>email1</value>
+				<value>email1</value>
+				<value>email1</value>
+				<value>email1</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}"/>
+		<property name="username" value="${mail.username}"/>
+		<property name="password" value="${mail.password}"/>
+	</bean>
+	
+	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<!--  <value><![CDATA[shuzhai_xliang@163.com]]></value> -->
+			<value>${message.from}</value>
+		</property>
+		<property name="subject">
+			<!--  <value>This is a test mail send by stlz</value> -->
+			<value>${message.subject}</value>
+		</property>
+		<property name="text">
+			<value>
+				<!--  <![CDATA[你好！书斋小说网收录了各种小说，种类丰富，内容精彩，欢迎广大小说爱好者投稿和阅读。详情请访问书斋小说官网！现在时间是："%DATE%"]]> -->
+				${message.text}
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="mailService" class="com.stlz.quartz.service.impl.MailServiceImpl">
+		<property name="mailSender" ref="mailSender"/>
+		<property name="mailMessage" ref="mailMessage"/>
+	</bean>
+	
+	<bean id="sendEmailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.stlz.quartz.job.SendEmailJob"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="mailBean">
+					<ref bean="mailBean"/>
+				</entry>
+				<entry key="mailService">
+					<ref bean="mailService"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="sendEmailJob"/>
+		<property name="startDelay" value="2000"/>
+		<property name="repeatInterval" value="60000"/>
+	</bean>
+	
+
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendEmailJob"/>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!--  <ref bean="simpleTrigger"/> -->
+				<ref bean="cronTrigger"/>
+			</list>
+		</property>
+	</bean>
+</beans>
