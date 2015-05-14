@@ -93,19 +93,14 @@
 	<bean id="cronTrigger_semailjob" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="sendEmailJob" />
 		<property name="cronExpression">
-			<value>
-				${message.cronExpression}
-			</value>
+			<value>0 1 1 * * ?</value>
 		</property>
 	</bean>
 
 	<bean id="cronTrigger_csheeljob" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="collectionShellJob" />
 		<property name="cronExpression">
-			<!-- <value>0/20 * * * * ?</value>  -->
-			<value>
-				${CollectionShell.cronExpression}
-			</value>
+			<value>0/20 * * * * ?</value>
 		</property>
 	</bean>
 
