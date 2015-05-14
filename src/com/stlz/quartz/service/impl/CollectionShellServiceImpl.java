@@ -14,31 +14,38 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import com.stlz.quartz.bean.ShellBean;
 import com.stlz.quartz.service.AutoShellService;
+import com.stlz.quartz.util.JavaShellUtil;
 
-public class CollectionShellServiceImpl extends AutoShellService {
+public class CollectionShellServiceImpl implements AutoShellService {
 
 	private static Logger logger = Logger
 			.getLogger(CollectionShellServiceImpl.class.getName());
 
-	public CollectionShellServiceImpl(AutoShellService ass) {
-		super();
-		this.ass = ass;
+	private JavaShellUtil jsu;
+
+	public CollectionShellServiceImpl() {
+		jsu = new JavaShellUtil();
 	}
 
-	AutoShellService ass;
-	String shellCommand = "/home/cmccpay/tool/daily.sh";
-
-	public void executeShell() {
+	public void execute(ShellBean shellbean) throws IOException {
+		//shell command result
+		int success = 0;
 		try {
-			logger.info("Job1 : {收集各服务器巡检结果信息}的shell脚本开始执行...");
-			logger.info("ShellCommand : " + shellCommand);
-			ass.execute(shellCommand);
-			logger.info("Job1 : 生成 {收集各服务器巡检结果信息}的shell脚本执行结束.");
+			logger.info("Job : {" + shellbean.getDescription()
+					+ "}的Shell脚本开始执行...");
+			logger.info("ShellCommand : " + shellbean.getScript());
+			jsu.executeShell(shellbean.getScript());
+			if (success == 1)
+				logger.info("Job : {" + shellbean.getDescription()
+						+ "}的Shell脚本执行结束, 执行成功.");
+			else
+				logger.info("Job : {" + shellbean.getDescription()
+						+ "}的Shell脚本执行结束, 执行失败.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

@@ -10,9 +10,6 @@ package com.stlz.quartz.job;
  * @Email: liuzhuang@umpay.com
  */
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.JobExecutionContext;
@@ -25,10 +22,16 @@ import com.stlz.quartz.service.MailService;
 public class SendEmailJob extends QuartzJobBean {
 
 	private static Log logger = LogFactory.getLog(SendEmailJob.class);
-	private static SimpleDateFormat format = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+
 	private MailBean mailBean;
 	private MailService mailService;
+
+	protected void executeInternal(JobExecutionContext arg0)
+			throws JobExecutionException {
+		logger.info("Job: 邮件定时发送任务就绪......");
+		mailService.sendEmail(mailBean);
+
+	}
 
 	public void setMailBean(MailBean mailBean) {
 		this.mailBean = mailBean;
@@ -38,10 +41,4 @@ public class SendEmailJob extends QuartzJobBean {
 		this.mailService = mailService;
 	}
 
-	protected void executeInternal(JobExecutionContext arg0)
-			throws JobExecutionException {
-		logger.info("*****************" + format.format(new Date())
-				+ "邮件准备就绪***************");
-		mailService.sendEmail(mailBean);
-	}
 }

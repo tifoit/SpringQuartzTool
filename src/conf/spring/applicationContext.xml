@@ -2,44 +2,55 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
- 
-	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+	<bean id="propertyConfigure"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:conf/props/mail.properties</value>
+				<value>classpath:conf/props/config.properties</value>
 			</list>
 		</property>
 	</bean>
 
+	<bean id="shellBean" class="com.stlz.quartz.bean.ShellBean">
+		<property name="script" value="${CollectionShell.script}" />
+		<property name="description" value="${CollectionShell.description}" />
+	</bean>
+
 	<bean id="mailBean" class="com.stlz.quartz.bean.MailBean">
 		<property name="address">
-			<value>liuzhuang@umpay.com</value>
+			<value>${mail.to}</value>
 		</property>
 		<property name="mailArray">
 			<list>
-				<value>13812345678@139.com</value>
-				<value>13098765432@126.com</value>
+				<value>${cc.to1}</value>
+				<value>${cc.to2}</value>
 			</list>
 		</property>
 	</bean>
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="${mail.host}"/>
-		<property name="port" value="${mail.port}"/>
-		<property name="username" value="${mail.username}"/>
-		<property name="password" value="${mail.password}"/>
-		<property name="javaMailProperties">
-            <props>
-                <!-- Use SMTP transport protocol -->
-                <prop key="mail.transport.protocol">smtp</prop>
-                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <prop key="mail.smtp.auth">true</prop>
-                <!-- Use TLS to encrypt communication with SMTP server -->
-                <prop key="mail.smtp.starttls.enable">true</prop>
-                <prop key="mail.debug">true</prop>
-            </props>
-        </property>
+
+	<bean id="mailService" class="com.stlz.quartz.service.impl.MailServiceImpl">
+		<property name="mailSender" ref="mailSender" />
+		<property name="mailMessage" ref="mailMessage" />
 	</bean>
-	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="port" value="${mail.port}" />
+		<property name="username" value="${mail.username}" />
+		<property name="password" value="${mail.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<!-- Use SMTP transport protocol -->
+				<prop key="mail.transport.protocol">smtp</prop>
+				<!-- Use SMTP-AUTH to authenticate to SMTP server -->
+				<prop key="mail.smtp.auth">true</prop>
+				<!-- Use TLS to encrypt communication with SMTP server -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
 	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
 		<property name="from">
 			<value>${message.from}</value>
@@ -53,45 +64,51 @@
 			</value>
 		</property>
 	</bean>
-	
-	<bean id="mailService" class="com.stlz.quartz.service.impl.MailServiceImpl">
-		<property name="mailSender" ref="mailSender"/>
-		<property name="mailMessage" ref="mailMessage"/>
-	</bean>
-	
+
 	<bean id="sendEmailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="com.stlz.quartz.job.SendEmailJob"/>
+		<property name="jobClass" value="com.stlz.quartz.job.SendEmailJob" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="mailBean">
-					<ref bean="mailBean"/>
+					<ref bean="mailBean" />
 				</entry>
 				<entry key="mailService">
-					<ref bean="mailService"/>
+					<ref bean="mailService" />
 				</entry>
 			</map>
 		</property>
 	</bean>
-	
-	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail" ref="sendEmailJob"/>
-		<property name="startDelay" value="2000"/>
-		<property name="repeatInterval" value="60000"/>
-	</bean>
-	
 
-	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="sendEmailJob"/>
-		<property name="cronExpression">
-			<value>0/30 * * * * ?</value>
+	<bean id="collectionShellJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.stlz.quartz.job.CollectionShellJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="shellBean">
+					<ref bean="shellBean" />
+				</entry>
+			</map>
 		</property>
 	</bean>
-	
+
+	<bean id="cronTrigger_semailjob" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendEmailJob" />
+		<property name="cronExpression">
+			<value>0 1 1 * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="cronTrigger_csheeljob" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="collectionShellJob" />
+		<property name="cronExpression">
+			<value>0/20 * * * * ?</value>
+		</property>
+	</bean>
+
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<!--  <ref bean="simpleTrigger"/> -->
-				<ref bean="cronTrigger"/>
+				<ref bean="cronTrigger_semailjob" />
+				<ref bean="cronTrigger_csheeljob" />
 			</list>
 		</property>
 	</bean>

@@ -25,11 +25,11 @@ import com.stlz.quartz.service.MailService;
 public class MailServiceImpl implements MailService {
 
 	private static Log logger = LogFactory.getLog(MailServiceImpl.class);
+	private SimpleDateFormat format = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 
 	private MailSender mailSender;
 	private SimpleMailMessage mailMessage;
-	private SimpleDateFormat format = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
 
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
@@ -47,8 +47,7 @@ public class MailServiceImpl implements MailService {
 		String text = message.getText();
 		text = StringUtils.replace(text, "%DATE%", format.format(new Date()));
 		message.setText(text);
-		logger.info("*****************" + format.format(new Date())
-				+ "开始发送邮件***************");
+		logger.info("*****************" + format.format(new Date()) + "开始发送邮件***************");
 		mailSender.send(message);
 	}
 

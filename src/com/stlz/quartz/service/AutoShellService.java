@@ -12,13 +12,8 @@ package com.stlz.quartz.service;
 
 import java.io.IOException;
 
-import com.stlz.quartz.util.JavaShellUtil;
+import com.stlz.quartz.bean.ShellBean;
 
-public abstract class AutoShellService {
-	private JavaShellUtil jsu = new JavaShellUtil();
-
-	public void execute(String shellScript) throws IOException {
-		jsu.executeShell(shellScript);
-	}
-
+public interface AutoShellService {
+	public void execute(ShellBean sbean) throws IOException;
 }
