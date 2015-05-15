@@ -19,22 +19,36 @@
 	</bean>
 
 	<bean id="mailBean" class="com.stlz.quartz.bean.MailBean">
+		<property name="from">
+			<value>${mail.from}</value>
+		</property>
 		<property name="address">
 			<value>${mail.to}</value>
 		</property>
 		<property name="mailArray">
 			<list>
-				<value>${cc.to1}</value>
-				<value>${cc.to2}</value>
+				<value>${mail.cc1}</value>
+				<value>${mail.cc2}</value>
 			</list>
+		</property>
+		<property name="attachFile">
+			<value>${mail.attachFile}</value>
+		</property>
+		<property name="attachName">
+			<value>${mail.attachName}</value>
+		</property>
+		<property name="subject">
+			<value>${mail.subject}</value>
+		</property>
+		<property name="text">
+			<value>${mail.text}</value>
 		</property>
 	</bean>
 
 	<bean id="mailService" class="com.stlz.quartz.service.impl.MailServiceImpl">
-		<property name="mailSender" ref="mailSender" />
-		<property name="mailMessage" ref="mailMessage" />
+		<property name="senderImpl" ref="senderImpl" />
 	</bean>
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="senderImpl" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.host}" />
 		<property name="port" value="${mail.port}" />
 		<property name="username" value="${mail.username}" />
@@ -49,19 +63,6 @@
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.debug">true</prop>
 			</props>
-		</property>
-	</bean>
-	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
-		<property name="from">
-			<value>${message.from}</value>
-		</property>
-		<property name="subject">
-			<value>${message.subject}</value>
-		</property>
-		<property name="text">
-			<value>
-				${message.text}
-			</value>
 		</property>
 	</bean>
 
@@ -93,14 +94,14 @@
 	<bean id="cronTrigger_semailjob" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="sendEmailJob" />
 		<property name="cronExpression">
-			<value>0 1 1 * * ?</value>
+			<value>0/30 * * * * ?</value>
 		</property>
 	</bean>
 
 	<bean id="cronTrigger_csheeljob" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="collectionShellJob" />
 		<property name="cronExpression">
-			<value>0/20 * * * * ?</value>
+			<value>0 0 0 * * ?</value>
 		</property>
 	</bean>
 
