@@ -112,5 +112,11 @@
 				<ref bean="cronTrigger_csheeljob" />
 			</list>
 		</property>
+		<property name="quartzProperties">
+			<props>
+				<!-- 参数设置成ture, 就会取消Quartz检查更新,即：“Checking for available updated version of Quartz”-->
+				<prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+			</props>
+		</property>
 	</bean>
 </beans>
